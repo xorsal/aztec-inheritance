@@ -1,0 +1,5 @@
+[workspace]
+members = [
+  "src/aztec-token-mixin",
+  "src/amm_token",
+]

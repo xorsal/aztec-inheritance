@@ -1,0 +1,119 @@
+//! The functionality in this module is triggered by the `#[aztec]` macro. It generates new functions, prefixed with
+//! `__aztec_nr_internals___`, from the ones marked with `#[external(...)]` and `#[internal(...)]` attributes. The
+//! original functions are then modified to be uncallable. This prevents developers from inadvertently calling a
+//! function directly, instead of performing a proper contract call.
+
+pub mod abi_attributes;
+pub(crate) mod external_functions_registry;
+pub(crate) mod internal_functions_registry;
+pub(crate) mod abi_export;
+pub(crate) mod external;
+pub(crate) mod internal;
+
+use abi_export::create_fn_abi_export;
+use external::{
+    private::generate_private_external, public::generate_public_external, utility::generate_utility_external,
+};
+use internal::{generate_private_internal, generate_public_internal};
+
+/// Modifies a function such that when it's called directly, it will result in a compilation error with a reasonable
+/// error message.
+comptime fn make_functions_uncallable<let N: u32>(functions: [FunctionDefinition], error_message_template: str<N>) {
+    functions.for_each(|function| {
+        let name = function.name();
+        // The body of the function will contain a static_assert(false, ...) to prevent the function from being called
+        // directly and a std::mem::zeroed() to make the compilation fail on the static_assert and not on a missing
+        // return value.
+        let error_message = f"{error_message_template}{name}. See https://docs.aztec.network/errors/6";
+
+        // Disabling the function also adds a `contract_library_method` attribute to the function to prevent this
+        // function from being compiled as an entrypoint function (function that's compiled as its own circuit).
+        function.disable(error_message);
+    });
+}
+
+/// Produces new functions for all external and internal contract functions, prefixing them with
+/// `__aztec_nr_internals___`, and then renders the original functions uncallable.
+///
+/// Note: Only the module's OWN functions (registered by its own `#[external]`/`#[internal]`
+/// attributes) are processed here. Composed template functions have their
+/// `__aztec_nr_internals__` wrappers pre-generated and stored in `template_registry`; they are
+/// included separately in the final `aztec()` output to avoid the cross-crate `f.body()` limitation.
+pub(crate) comptime fn process_functions(m: Module) -> Quoted {
+    // EXTERNAL FUNCTIONS - use own-only getters to avoid cross-crate f.body() errors.
+    let private_functions = external_functions_registry::get_own_private_functions(m);
+    let public_functions = external_functions_registry::get_own_public_functions(m);
+    let utility_functions = external_functions_registry::get_own_utility_functions(m);
+
+    let transformed_private_functions =
+        private_functions.map(|function| generate_private_external(function)).join(quote {});
+    let transformed_public_functions =
+        public_functions.map(|function| generate_public_external(function)).join(quote {});
+    let transformed_utility_functions =
+        utility_functions.map(|function| generate_utility_external(function)).join(quote {});
+
+    // Now that we have generated quotes of the new functions based on the original function definitions, we replace
+    // the original functions' bodies with `static_assert(false, ...)` to prevent them from being called directly from
+    // within the contract. We also need to set the return type to `()` to avoid compilation errors.
+    make_functions_uncallable(
+        private_functions,
+        "Direct invocation of private functions is not supported. You attempted to call ",
+    );
+    make_functions_uncallable(
+        public_functions,
+        "Direct invocation of public functions is not supported. You attempted to call ",
+    );
+    make_functions_uncallable(
+        utility_functions,
+        "Direct invocation of utility functions is not supported. You attempted to call ",
+    );
+
+    // INTERNAL FUNCTIONS - use own-only getters to avoid cross-crate f.body() errors.
+    let private_internal_functions = internal_functions_registry::get_own_private_functions(m);
+    let public_internal_functions = internal_functions_registry::get_own_public_functions(m);
+
+    let generated_private_internal_functions =
+        private_internal_functions.map(|function| generate_private_internal(function)).join(quote {});
+    let generated_public_internal_functions =
+        public_internal_functions.map(|function| generate_public_internal(function)).join(quote {});
+
+    // Just like for external functions, we make the internal functions not directly callable.
+    make_functions_uncallable(
+        private_internal_functions,
+        "Direct invocation of private internal functions is not supported. You attempted to call ",
+    );
+    make_functions_uncallable(
+        public_internal_functions,
+        "Direct invocation of public internal functions is not supported. You attempted to call ",
+    );
+
+    // We return the new functions' quotes to be injected into the contract.
+    quote {
+        $transformed_private_functions
+        $transformed_public_functions
+        $transformed_utility_functions
+        $generated_private_internal_functions
+        $generated_public_internal_functions
+    }
+}
+
+// See docs of create_fn_abi_export for information on what this does.
+// Note: Only the module's OWN functions are processed here. Composed template functions have their
+// ABI export structs pre-generated in `template_registry` and included separately.
+pub(crate) comptime fn create_fn_abi_exports(m: Module) -> Quoted {
+    let private_functions_exports = external_functions_registry::get_own_private_functions(m)
+        .map(|function| create_fn_abi_export(function))
+        .join(quote {});
+    let public_functions_exports = external_functions_registry::get_own_public_functions(m)
+        .map(|function| create_fn_abi_export(function))
+        .join(quote {});
+    let utility_functions_exports = external_functions_registry::get_own_utility_functions(m)
+        .map(|function| create_fn_abi_export(function))
+        .join(quote {});
+
+    quote {
+        $private_functions_exports
+        $public_functions_exports
+        $utility_functions_exports
+    }
+}

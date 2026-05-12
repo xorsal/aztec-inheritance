@@ -1,0 +1,12 @@
+[package]
+name = "amm_token_contract"
+type = "contract"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec" }
+uint_note = { path = "../../vendor/uint-note" }
+compressed_string = { path = "../../vendor/compressed-string" }
+balance_set = { path = "../../vendor/balance-set" }
+aztec_token_mixin = { path = "../aztec-token-mixin" }

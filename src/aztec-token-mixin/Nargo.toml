@@ -1,0 +1,11 @@
+[package]
+name = "aztec_token_mixin"
+type = "lib"
+authors = ["Wonderland"]
+compiler_version = ">=0.18.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec" }
+uint_note = { path = "../../vendor/uint-note" }
+compressed_string = { path = "../../vendor/compressed-string" }
+balance_set = { path = "../../vendor/balance-set" }
