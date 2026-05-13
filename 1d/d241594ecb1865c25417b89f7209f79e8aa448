@@ -1,0 +1,25 @@
+vendor/aztec-nr/aztec/Nargo.toml
+  ai_agent 8
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/mod.nr
+  ai_agent 9,37-41,43-46,71-73,101-102,104,107,110
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external_functions_registry.nr
+  ai_agent 16-20,32-45,58-72,76,80,83-101
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/internal_functions_registry.nr
+  ai_agent 14-17,29-42,51-61,65,68-80
+vendor/aztec-nr/aztec/src/macros/mod.nr
+  ai_agent 16-112
+vendor/aztec-nr/aztec/src/macros/template_registry.nr
+  ai_agent 1-54
+vendor/aztec-nr/aztec/src/macros/events.nr
+  ai_agent 38-47
+vendor/aztec-nr/aztec/src/macros/aztec.nr
+  ai_agent 9,14,36,45,56-70,105-110,166-172,176,179,181
+vendor/aztec-nr/aztec/src/macros/compose_template.nr
+  ai_agent 1-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "1dd241594ecb1865c25417b89f7209f79e8aa448",
+  "prompts": {}
+}
