@@ -6,7 +6,7 @@
 pub mod abi_attributes;
 pub(crate) mod external_functions_registry;
 pub(crate) mod internal_functions_registry;
-mod abi_export;
+pub(crate) mod abi_export;
 pub(crate) mod external;
 pub(crate) mod internal;
 
@@ -34,11 +34,16 @@ comptime fn make_functions_uncallable<let N: u32>(functions: [FunctionDefinition
 
 /// Produces new functions for all external and internal contract functions, prefixing them with
 /// `__aztec_nr_internals___`, and then renders the original functions uncallable.
+///
+/// Note: Only the module's OWN functions (registered by its own `#[external]`/`#[internal]`
+/// attributes) are processed here. Composed template functions have their
+/// `__aztec_nr_internals__` wrappers pre-generated and stored in `template_registry`; they are
+/// included separately in the final `aztec()` output to avoid the cross-crate `f.body()` limitation.
 pub(crate) comptime fn process_functions(m: Module) -> Quoted {
-    // EXTERNAL FUNCTIONS
-    let private_functions = external_functions_registry::get_private_functions(m);
-    let public_functions = external_functions_registry::get_public_functions(m);
-    let utility_functions = external_functions_registry::get_utility_functions(m);
+    // EXTERNAL FUNCTIONS - use own-only getters to avoid cross-crate f.body() errors.
+    let private_functions = external_functions_registry::get_own_private_functions(m);
+    let public_functions = external_functions_registry::get_own_public_functions(m);
+    let utility_functions = external_functions_registry::get_own_utility_functions(m);
 
     let transformed_private_functions =
         private_functions.map(|function| generate_private_external(function)).join(quote {});
@@ -63,9 +68,9 @@ pub(crate) comptime fn process_functions(m: Module) -> Quoted {
         "Direct invocation of utility functions is not supported. You attempted to call ",
     );
 
-    // INTERNAL FUNCTIONS
-    let private_internal_functions = internal_functions_registry::get_private_functions(m);
-    let public_internal_functions = internal_functions_registry::get_public_functions(m);
+    // INTERNAL FUNCTIONS - use own-only getters to avoid cross-crate f.body() errors.
+    let private_internal_functions = internal_functions_registry::get_own_private_functions(m);
+    let public_internal_functions = internal_functions_registry::get_own_public_functions(m);
 
     let generated_private_internal_functions =
         private_internal_functions.map(|function| generate_private_internal(function)).join(quote {});
@@ -93,14 +98,16 @@ pub(crate) comptime fn process_functions(m: Module) -> Quoted {
 }
 
 // See docs of create_fn_abi_export for information on what this does.
+// Note: Only the module's OWN functions are processed here. Composed template functions have their
+// ABI export structs pre-generated in `template_registry` and included separately.
 pub(crate) comptime fn create_fn_abi_exports(m: Module) -> Quoted {
-    let private_functions_exports = external_functions_registry::get_private_functions(m)
+    let private_functions_exports = external_functions_registry::get_own_private_functions(m)
         .map(|function| create_fn_abi_export(function))
         .join(quote {});
-    let public_functions_exports = external_functions_registry::get_public_functions(m)
+    let public_functions_exports = external_functions_registry::get_own_public_functions(m)
         .map(|function| create_fn_abi_export(function))
         .join(quote {});
-    let utility_functions_exports = external_functions_registry::get_utility_functions(m)
+    let utility_functions_exports = external_functions_registry::get_own_utility_functions(m)
         .map(|function| create_fn_abi_export(function))
         .join(quote {});
 

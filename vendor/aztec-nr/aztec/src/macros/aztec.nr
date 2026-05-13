@@ -6,10 +6,12 @@ use crate::{
             external_functions::{generate_external_function_calls, generate_external_function_self_calls_structs},
             internal_functions::generate_call_internal_struct,
         },
+        compose_template::{get_composed_templates_quoted, inject_template_functions_to_registries},
         dispatch::generate_public_dispatch,
         emit_public_init_nullifier::generate_emit_public_init_nullifier,
         internals_functions_generation::{create_fn_abi_exports, process_functions},
         storage::STORAGE_LAYOUT_NAME,
+        template_registry,
         utils::{is_fn_contract_library_method, is_fn_external, is_fn_internal, is_fn_test, module_has_storage},
     },
     messages::discovery::CustomMessageHandler,
@@ -31,6 +33,7 @@ use compute_note_hash_and_nullifier::generate_contract_library_methods_compute_n
 /// ```
 pub struct AztecConfig {
     custom_message_handler: Option<CustomMessageHandler<()>>,
+    composed_templates: [Field],
 }
 
 impl AztecConfig {
@@ -39,7 +42,7 @@ impl AztecConfig {
     /// Calling `new` is equivalent to invoking the [`aztec`] macro with no parameters. The different methods
     /// (e.g. [`AztecConfig::custom_message_handler`]) can then be used to change the default behavior.
     pub comptime fn new() -> Self {
-        Self { custom_message_handler: Option::none() }
+        Self { custom_message_handler: Option::none(), composed_templates: @[] }
     }
 
     /// Sets a handler for custom messages.
@@ -50,7 +53,21 @@ impl AztecConfig {
     /// `handler` must be a `#[contract_library_method]` function that conforms to the
     /// [`crate::messages::discovery::CustomMessageHandler`] type signature.
     pub comptime fn custom_message_handler(_self: Self, handler: CustomMessageHandler<()>) -> Self {
-        Self { custom_message_handler: Option::some(handler) }
+        Self { custom_message_handler: Option::some(handler), composed_templates: _self.composed_templates }
+    }
+
+    /// Enables injection of a named contract template into the host contract, as if the developer
+    /// had written the template's external/internal/helper functions directly in the host.
+    ///
+    /// The template contract must be compiled first and have `#[aztec::macros::contract_template]`
+    /// applied to it with the same id.
+    pub comptime fn compose(_self: Self, template_id: CtString) -> Self {
+        Self {
+            custom_message_handler: _self.custom_message_handler,
+            composed_templates: _self.composed_templates.push_back(
+                template_registry::template_key(template_id),
+            ),
+        }
     }
 }
 
@@ -84,6 +101,12 @@ pub comptime fn aztec(m: Module, args: [AztecConfig]) -> Quoted {
     } else {
         panic(f"#[aztec] expects 0 or 1 arguments, got {num_args}")
     };
+
+    // If contract templates are enabled, populate the host's composed registries with the
+    // selected templates' FunctionDefinitions so that interface/stub generators include them.
+    if config.composed_templates.len() > 0 {
+        inject_template_functions_to_registries(m, config.composed_templates);
+    }
 
     // Functions that don't have #[external(...)], #[contract_library_method], or #[test] are not allowed in contracts.
     check_each_fn_macroified(m);
@@ -140,12 +163,22 @@ pub comptime fn aztec(m: Module, args: [AztecConfig]) -> Quoted {
     let (has_public_init_nullifier_fn, emit_public_init_nullifier_fn_body) = generate_emit_public_init_nullifier(m);
     let public_dispatch = generate_public_dispatch(m, has_public_init_nullifier_fn);
 
+    let (composed_functions, composed_abi_exports, composed_self_call_structs) =
+        if config.composed_templates.len() > 0 {
+        get_composed_templates_quoted(config.composed_templates)
+    } else {
+        (quote {}, quote {}, quote {})
+    };
+
     quote {
         $interface
         $self_call_structs
+        $composed_self_call_structs
         $call_internal_struct
         $functions
+        $composed_functions
         $fn_abi_exports
+        $composed_abi_exports
         $contract_library_method_compute_note_hash_and_nullifier
         $public_dispatch
         $sync_state_fn_and_abi_export
