@@ -5,8 +5,8 @@ authors = ["Wonderland"]
 compiler_version = ">=1.0.0"
 
 [dependencies]
-aztec = { path = "../../vendor/aztec" }
-uint_note = { path = "../../vendor/uint-note" }
-compressed_string = { path = "../../vendor/compressed-string" }
-balance_set = { path = "../../vendor/balance-set" }
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+uint_note = { path = "../../vendor/aztec-nr/uint-note" }
+compressed_string = { path = "../../vendor/aztec-nr/compressed-string" }
+balance_set = { path = "../../vendor/aztec-nr/balance-set" }
 aztec_token_mixin = { path = "../aztec-token-mixin" }
