@@ -1,0 +1,21 @@
+src/aztec-token-mixin/Nargo.toml
+  s_2f0c6061fc8db7::t_97741f357279d8 8-11
+src/amm_token/Nargo.toml
+  s_2f0c6061fc8db7::t_d1cb1c3fc65847 8-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "5b18d7d6f361d1c19a433d51ff24fd4a3f6ec9fa",
+  "prompts": {},
+  "sessions": {
+    "s_2f0c6061fc8db7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e0ac3166-15fa-44d9-b4cc-5207d5f47521",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
