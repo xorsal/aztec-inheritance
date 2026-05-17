@@ -1,0 +1,26 @@
+tests/upgrade.test.ts
+  s_35467aa51f6067::t_90e5f15586bc43 38-39,41
+  s_35467aa51f6067::t_43d5db24c4e090 6
+  s_35467aa51f6067::t_eafc17a7350da8 89-93
+  s_35467aa51f6067::t_ab4ba467df5bec 35-36
+  s_35467aa51f6067::t_a6f8cea0fa9dba 81-87,97-101,103-106,108-115
+  s_35467aa51f6067::t_a97a8402d5a429 1-5,7-22,24-34,44-80,88,94-96,102,107,116-117
+  s_35467aa51f6067::t_57d4588b14811d 37,40,42-43
+  s_35467aa51f6067::t_02fef09977765e 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "92b13810cbef76e845ae625becf6dd1721d607f1",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
