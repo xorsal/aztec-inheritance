@@ -1,0 +1,11 @@
+[package]
+name = "ownable_upgradable_counter_v2"
+type = "contract"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+contract_instance_registry = { path = "../../vendor/contract_instance_registry_interface" }
+aztec_upgradable_mixin = { path = "../aztec-upgradable-mixin" }
+aztec_ownable_mixin = { path = "../aztec-ownable-mixin" }

@@ -7,5 +7,6 @@ members = [
   "src/upgradable_counter",
   "src/upgradable_counter_v2",
   "src/ownable_upgradable_counter",
+  "src/ownable_upgradable_counter_v2",
   "vendor/contract_instance_registry_interface",
 ]
