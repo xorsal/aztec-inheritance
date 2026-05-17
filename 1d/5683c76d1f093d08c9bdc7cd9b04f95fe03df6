@@ -1,0 +1,21 @@
+tests/ownable_upgrade.test.ts
+  s_35467aa51f6067::t_a1327186e5c458 1-125
+package.json
+  s_35467aa51f6067::t_abf6f6e8753709 8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "1d5683c76d1f093d08c9bdc7cd9b04f95fe03df6",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
