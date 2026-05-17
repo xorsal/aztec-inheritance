@@ -1,0 +1,15 @@
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/utility.nr
+  ai_agent 1,7-8,10,12
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/internal.nr
+  ai_agent 1,21,23,72,74
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/public.nr
+  ai_agent 34,36
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/private.nr
+  ai_agent 33-35,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "10ed701d6d55ff0d55c8b7806c0ea2f7807738f5",
+  "prompts": {}
+}
