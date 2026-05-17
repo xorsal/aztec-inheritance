@@ -1,0 +1,31 @@
+src/aztec-ownable-mixin/src/lib.nr
+  s_35467aa51f6067::t_28a09f31640ec6 3-8
+vendor/aztec-nr/aztec/src/macros/functions/auth_registry.nr
+  ai_agent 10-16
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/helpers.nr
+  ai_agent 2,121-145
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/public.nr
+  ai_agent 2-4,6,104-111,119
+vendor/aztec-nr/aztec/src/macros/utils.nr
+  ai_agent 46-49
+vendor/aztec-nr/aztec/src/macros/functions/mod.nr
+  ai_agent 11,328-353
+vendor/aztec-nr/aztec/src/macros/internals_functions_generation/external/private.nr
+  ai_agent 5-6,123-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "d753da66f4d22123d7c651a725bb0d60a6ca5407",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
