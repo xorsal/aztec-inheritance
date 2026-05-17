@@ -9,6 +9,9 @@ codegenCache.json
 # Node
 node_modules/
 
+# Generated TS artifacts from `aztec codegen`
+tests/artifacts/
+
 # Env
 .env
 .env.local
