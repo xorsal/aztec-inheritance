@@ -1,0 +1,25 @@
+vitest.config.ts
+  s_35467aa51f6067::t_815e13e56292e5 1-10
+tsconfig.json
+  s_35467aa51f6067::t_9edb75de797264 1-16
+package.json
+  s_35467aa51f6067::t_95305eddd3ccc4 19-20
+  s_35467aa51f6067::t_740a28300939b8 1-13,21-28
+  s_35467aa51f6067::t_f2be06a897d766 14-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "8604a7c7371641945ba58da5475d677ed4371fd4",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
