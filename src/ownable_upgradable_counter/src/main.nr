@@ -12,6 +12,8 @@
 // `get_update_delay`) and ownership administration (`get_owner`,
 // `transfer_ownership`) are injected by the composed templates.
 
+pub mod test;
+
 use aztec::macros::{AztecConfig, aztec};
 
 #[aztec(AztecConfig::new().compose("aztec_ownable").compose("aztec_upgradable"))]
