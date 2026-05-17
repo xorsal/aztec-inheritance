@@ -1,0 +1,9 @@
+[package]
+name = "aztec_upgradable_mixin"
+type = "lib"
+authors = ["Wonderland"]
+compiler_version = ">=0.18.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+contract_instance_registry = { path = "../../vendor/contract_instance_registry_interface" }
