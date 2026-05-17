@@ -170,11 +170,23 @@ pub comptime fn aztec(m: Module, args: [AztecConfig]) -> Quoted {
         (quote {}, quote {}, quote {})
     };
 
+    // Always synthesize ComposedStorage whenever the module has a #[storage] struct, so that template bodies
+    // captured with `Storage::init` (which we rewrite to `ComposedStorage::init`) resolve against a merged struct
+    // regardless of whether the host itself composes templates. When no templates are composed, ComposedStorage
+    // equals the host's own fields - functionally identical to the legacy Storage path.
+    let composed_storage_struct = if module_has_storage(m) {
+        crate::macros::compose_template::MODULE_HAS_COMPOSED_STORAGE.insert(m, ());
+        crate::macros::compose_template::generate_composed_storage_quoted(m, config.composed_templates)
+    } else {
+        quote {}
+    };
+
     quote {
         $interface
         $self_call_structs
         $composed_self_call_structs
         $call_internal_struct
+        $composed_storage_struct
         $functions
         $composed_functions
         $fn_abi_exports
