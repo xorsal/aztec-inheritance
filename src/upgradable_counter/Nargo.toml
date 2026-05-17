@@ -1,0 +1,10 @@
+[package]
+name = "upgradable_counter"
+type = "contract"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+contract_instance_registry = { path = "../../vendor/contract_instance_registry_interface" }
+aztec_upgradable_mixin = { path = "../aztec-upgradable-mixin" }
