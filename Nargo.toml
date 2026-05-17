@@ -3,6 +3,7 @@ members = [
   "src/aztec-token-mixin",
   "src/amm_token",
   "src/aztec-upgradable-mixin",
+  "src/aztec-ownable-mixin",
   "src/upgradable_counter",
   "src/upgradable_counter_v2",
   "vendor/contract_instance_registry_interface",
