@@ -1,11 +1,9 @@
 // Demo host: a public counter that composes the upgradable mixin.
 //
-// The developer writes ONLY the counter logic + the storage field the mixin
-// needs (`owner`). All upgrade administration (`update_to`,
-// `set_update_delay`, `get_update_delay`) is injected by
-// `#[aztec(AztecConfig::new().compose("aztec_upgradable"))]`. The owner field
-// doubles as the "owner" role expected by a future `aztec_ownable`
-// composition - shared slot, single role.
+// The developer writes ONLY counter-specific state. The `owner` slot needed by
+// the composed `aztec_upgradable` template is now contributed automatically by
+// the macro and merged into the synthesized `ComposedStorage` (templates first,
+// host fields appended) - no more L-4 inlining boilerplate.
 
 pub mod test;
 
@@ -24,12 +22,8 @@ pub contract UpgradableCounter {
 
     #[storage]
     struct Storage<Context> {
-        // Required by the composed `aztec_upgradable` template (L-4: nested
-        // storage not yet supported; inline the mixin's fields). Order
-        // matters: this field must stay at the same slot in upgrade targets
-        // (upgradable_counter_v2) for the persisted owner to remain readable.
-        owner: PublicMutable<AztecAddress, Context>,
-        // Counter-specific state.
+        // Counter-specific state. `owner` is contributed by aztec_upgradable
+        // via the macro-synthesized ComposedStorage.
         count: PublicMutable<u64, Context>,
     }
 
@@ -51,9 +45,6 @@ pub contract UpgradableCounter {
         self.storage.count.read()
     }
 
-    /// Returns a version tag so the test can prove the new class is now live
-    /// after `update_to`. v1 returns 1; the v2 contract under the same name
-    /// will return 2.
     #[external("public")]
     #[view]
     fn version() -> u64 {

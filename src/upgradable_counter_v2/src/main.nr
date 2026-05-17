@@ -20,7 +20,7 @@ pub contract UpgradableCounterV2 {
 
     #[storage]
     struct Storage<Context> {
-        owner: PublicMutable<AztecAddress, Context>,
+        // owner is contributed by the composed aztec_upgradable template.
         count: PublicMutable<u64, Context>,
     }
 
