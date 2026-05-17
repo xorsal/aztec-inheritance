@@ -122,7 +122,7 @@ pub(crate) comptime fn create_authorize_once_check(f: FunctionDefinition, is_pri
 /// Builds the quoted owner check that the public #[external] body re-emitter prepends to the function body when a
 /// function is marked with #[only_owner]. The check calls `_assert_only_owner(self.msg_sender(),
 /// self.storage.owner.read())`; both symbols are expected to be in scope via the `aztec_ownable_mixin` template
-/// composition. Private functions are not supported in this version — reading `PublicMutable` from a private context
+/// composition. Private functions are not supported in this version; reading `PublicMutable` from a private context
 /// would require an extra self.view(...) hop that we do not yet emit.
 pub(crate) comptime fn create_only_owner_check(f: FunctionDefinition, is_private: bool) -> Quoted {
     let name: Quoted = f.name();
