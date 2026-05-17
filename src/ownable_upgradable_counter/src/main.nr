@@ -30,12 +30,8 @@ pub contract OwnableUpgradableCounter {
 
     #[storage]
     struct Storage<Context> {
-        // Shared by both composed templates (L-4: nested storage not yet
-        // supported; inline the mixin fields). Field order matches the
-        // upgradable_counter baseline -- mixin-owned slot first, then
-        // host-specific state.
-        owner: PublicMutable<AztecAddress, Context>,
-        // Counter-specific state.
+        // owner is contributed by both composed templates (deduped via the
+        // macro's same-name+same-type rule); only host-specific state lives here.
         count: PublicMutable<u64, Context>,
     }
 

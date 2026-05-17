@@ -20,7 +20,8 @@ pub contract OwnableUpgradableCounterV2 {
 
     #[storage]
     struct Storage<Context> {
-        owner: PublicMutable<AztecAddress, Context>,
+        // owner is contributed by both composed templates (deduped); only
+        // host-specific state lives here.
         count: PublicMutable<u64, Context>,
     }
 
