@@ -1,0 +1,26 @@
+src/aztec-ownable-mixin/Nargo.toml
+  s_35467aa51f6067::t_972d29560304e8 1-8
+src/aztec-ownable-mixin/src/lib.nr
+  s_35467aa51f6067::t_26dcf85d1e3c55 1-2
+  s_35467aa51f6067::t_ac56399df1d351 3-5
+Nargo.toml
+  s_35467aa51f6067::t_2c9f2ba5d300d8 6
+src/aztec-ownable-mixin/src/ownable_contract_template.nr
+  s_35467aa51f6067::t_f79447cee1dd2a 1-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "5c1ad9504324cc7948c6af79a1cf4bc44ea8399b",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
