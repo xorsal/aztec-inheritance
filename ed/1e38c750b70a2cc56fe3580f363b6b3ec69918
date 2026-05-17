@@ -1,0 +1,21 @@
+src/upgradable_counter/src/main.nr
+  s_35467aa51f6067::t_cc22f45ae3942e 3-6,25-26
+src/upgradable_counter_v2/src/main.nr
+  s_35467aa51f6067::t_784f55650387de 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "ed1e38c750b70a2cc56fe3580f363b6b3ec69918",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
