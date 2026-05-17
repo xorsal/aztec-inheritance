@@ -1,12 +1,15 @@
+use crate::macros::compose_template::storage_struct_name_for;
 use crate::macros::utils::{fn_has_noinitcheck, module_has_initializer, module_has_storage};
 
 pub(crate) comptime fn generate_utility_external(f: FunctionDefinition) -> Quoted {
     let module_has_initializer = module_has_initializer(f.module());
 
-    // Initialize Storage if module has storage
+    // Initialize Storage if module has storage. When the module composes templates, `storage_struct_name_for`
+    // returns `ComposedStorage` (the synthesized merged struct); otherwise it returns the host's `Storage` as today.
     let storage_init = if module_has_storage(f.module()) {
+        let storage_name = storage_struct_name_for(f.module());
         quote {
-            let storage = Storage::init(context);
+            let storage = $storage_name::init(context);
         }
     } else {
         // Contract does not have Storage defined, so we set storage to the unit type `()`. ContractSelfUtility

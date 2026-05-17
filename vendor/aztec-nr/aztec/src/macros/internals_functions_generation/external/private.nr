@@ -30,9 +30,11 @@ pub(crate) comptime fn generate_private_external(f: FunctionDefinition) -> Quote
     let (args_serialization, _, serialized_args_name) = derive_serialization_quotes(original_params, false);
 
     let storage_init = if module_has_storage {
-        // Contract has Storage defined so we initialize it.
+        // Contract has Storage defined so we initialize it. Route to the merged `ComposedStorage` synthesized by
+        // `#[aztec]` when the host composes one or more templates.
+        let storage_name = crate::macros::compose_template::storage_struct_name_for(f.module());
         quote {
-            let storage = Storage::init(&mut context);
+            let storage = $storage_name::init(&mut context);
         }
     } else {
         // Contract does not have Storage defined, so we set storage to the unit type `()`. ContractSelfPrivate

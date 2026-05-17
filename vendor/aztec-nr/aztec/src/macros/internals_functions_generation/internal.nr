@@ -1,3 +1,4 @@
+use crate::macros::compose_template::storage_struct_name_for;
 use crate::macros::utils::module_has_storage;
 
 /// Generates a private internal function based on the function that was originally marked with #[internal("private")].
@@ -17,8 +18,9 @@ pub(crate) comptime fn generate_private_internal(f: FunctionDefinition) -> Quote
     };
 
     let storage_init = if module_has_storage(f.module()) {
+        let storage_name = storage_struct_name_for(f.module());
         quote {
-            let storage = Storage::init(context);
+            let storage = $storage_name::init(context);
         }
     } else {
         quote {
@@ -67,8 +69,9 @@ pub(crate) comptime fn generate_public_internal(f: FunctionDefinition) -> Quoted
     };
 
     let storage_init = if module_has_storage(f.module()) {
+        let storage_name = storage_struct_name_for(f.module());
         quote {
-            let storage = Storage::init(context);
+            let storage = $storage_name::init(context);
         }
     } else {
         quote {

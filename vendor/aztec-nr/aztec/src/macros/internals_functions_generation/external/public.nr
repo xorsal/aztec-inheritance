@@ -31,8 +31,9 @@ pub(crate) comptime fn generate_public_external(f: FunctionDefinition) -> Quoted
     };
 
     let storage_init = if module_has_storage {
+        let storage_name = crate::macros::compose_template::storage_struct_name_for(f.module());
         quote {
-            let storage = Storage::init(context);
+            let storage = $storage_name::init(context);
         }
     } else {
         // Contract does not have Storage defined, so we set storage to the unit type `()`. ContractSelfPublic requires
