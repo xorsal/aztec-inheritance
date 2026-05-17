@@ -1,6 +1,9 @@
 // Upgrade target. Same storage shape and exposed surface as upgradable_counter,
 // but `version()` returns 2 and `increment()` adds 10 instead of 1. The test
 // upgrades v1's class to v2's class and asserts those new behaviors appear.
+//
+// Storage layout MUST match upgradable_counter exactly (same field order,
+// same types) so the persisted `owner` value is readable from the new class.
 
 use aztec::macros::{AztecConfig, aztec};
 
@@ -12,19 +15,19 @@ pub contract UpgradableCounterV2 {
             storage::storage,
         },
         protocol::address::AztecAddress,
-        state_vars::{PublicImmutable, PublicMutable},
+        state_vars::PublicMutable,
     };
 
     #[storage]
     struct Storage<Context> {
-        upgrade_admin: PublicImmutable<AztecAddress, Context>,
+        owner: PublicMutable<AztecAddress, Context>,
         count: PublicMutable<u64, Context>,
     }
 
     #[initializer]
     #[external("public")]
-    fn constructor(upgrade_admin: AztecAddress) {
-        self.internal._initialize_upgradable(upgrade_admin);
+    fn constructor(owner: AztecAddress) {
+        self.internal._initialize_upgradable(owner);
         self.storage.count.write(0);
     }
 

@@ -1,9 +1,11 @@
 // Demo host: a public counter that composes the upgradable mixin.
 //
 // The developer writes ONLY the counter logic + the storage field the mixin
-// needs (`upgrade_admin`). All upgrade administration (`update_to`,
-// `set_update_delay`, `get_update_delay`, `get_upgrade_admin`) is injected
-// by `#[aztec(AztecConfig::new().compose("aztec_upgradable"))]`.
+// needs (`owner`). All upgrade administration (`update_to`,
+// `set_update_delay`, `get_update_delay`) is injected by
+// `#[aztec(AztecConfig::new().compose("aztec_upgradable"))]`. The owner field
+// doubles as the "owner" role expected by a future `aztec_ownable`
+// composition - shared slot, single role.
 
 pub mod test;
 
@@ -17,22 +19,24 @@ pub contract UpgradableCounter {
             storage::storage,
         },
         protocol::address::AztecAddress,
-        state_vars::{PublicImmutable, PublicMutable},
+        state_vars::PublicMutable,
     };
 
     #[storage]
     struct Storage<Context> {
         // Required by the composed `aztec_upgradable` template (L-4: nested
-        // storage not yet supported; inline the mixin's fields).
-        upgrade_admin: PublicImmutable<AztecAddress, Context>,
+        // storage not yet supported; inline the mixin's fields). Order
+        // matters: this field must stay at the same slot in upgrade targets
+        // (upgradable_counter_v2) for the persisted owner to remain readable.
+        owner: PublicMutable<AztecAddress, Context>,
         // Counter-specific state.
         count: PublicMutable<u64, Context>,
     }
 
     #[initializer]
     #[external("public")]
-    fn constructor(upgrade_admin: AztecAddress) {
-        self.internal._initialize_upgradable(upgrade_admin);
+    fn constructor(owner: AztecAddress) {
+        self.internal._initialize_upgradable(owner);
         self.storage.count.write(0);
     }
 
