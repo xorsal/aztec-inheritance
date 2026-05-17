@@ -44,15 +44,8 @@ pub contract Amm {
 
     #[storage]
     struct Storage<Context> {
-        // Token fields (inlined - L-4: nested struct not yet supported)
-        name: PublicImmutable<FieldCompressedString, Context>,
-        symbol: PublicImmutable<FieldCompressedString, Context>,
-        decimals: PublicImmutable<u8, Context>,
-        private_balances: Owned<BalanceSet<Context>, Context>,
-        total_supply: PublicMutable<u128, Context>,
-        public_balances: Map<AztecAddress, PublicMutable<u128, Context>, Context>,
-        minter: PublicImmutable<AztecAddress, Context>,
-        // AMM pool fields
+        // Token fields (name/symbol/decimals/private_balances/total_supply/public_balances/minter)
+        // are contributed by the composed aip20_token template; no need to inline.
         reserve_a: PublicMutable<u128, Context>,
         reserve_b: PublicMutable<u128, Context>,
         token_a: PublicImmutable<AztecAddress, Context>,
