@@ -1,0 +1,28 @@
+{
+  "name": "aztec-inheritance-tests",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run --no-file-parallelism",
+    "test:upgrade": "vitest run --no-file-parallelism tests/upgrade.test.ts"
+  },
+  "dependencies": {
+    "@aztec/accounts": "4.2.0",
+    "@aztec/aztec.js": "4.2.0",
+    "@aztec/constants": "4.2.0",
+    "@aztec/entrypoints": "4.2.0",
+    "@aztec/ethereum": "4.2.0",
+    "@aztec/foundation": "4.2.0",
+    "@aztec/pxe": "4.2.0",
+    "@aztec/stdlib": "4.2.0",
+    "@aztec/wallet-sdk": "4.2.0",
+    "@aztec/wallets": "4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.1.0"
+  }
+}
