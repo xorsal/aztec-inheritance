@@ -1,0 +1,19 @@
+src/aztec-upgradable-mixin/src/upgradable_contract_template.nr
+  s_35467aa51f6067::t_f0ad9094144510 4-9,12-15,20-24,30,34,39,47,61,81-84,86-87,90,92-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "fe36c69975285f29906c0d0a723b9f50975e1c97",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
