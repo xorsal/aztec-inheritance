@@ -1,7 +1,9 @@
 use crate::macros::{
-    internals_functions_generation::external::helpers::{create_authorize_once_check, get_abi_relevant_attributes},
+    internals_functions_generation::external::helpers::{
+        create_authorize_once_check, create_only_owner_check, get_abi_relevant_attributes,
+    },
     utils::{
-        fn_has_authorize_once, fn_has_noinitcheck, is_fn_initializer, is_fn_only_self, is_fn_view,
+        fn_has_authorize_once, fn_has_noinitcheck, fn_has_only_owner, is_fn_initializer, is_fn_only_self, is_fn_view,
         module_has_initializer, module_has_storage,
     },
 };
@@ -99,6 +101,14 @@ pub(crate) comptime fn generate_public_external(f: FunctionDefinition) -> Quoted
         quote {}
     };
 
+    // Inject the owner check if the function is marked with #[only_owner]. Expects the host to have composed
+    // aztec_ownable_mixin so `_assert_only_owner` and `self.storage.owner` are in scope.
+    let only_owner_check = if fn_has_only_owner(f) {
+        create_only_owner_check(f, false)
+    } else {
+        quote {}
+    };
+
     let to_prepend = quote {
         $contract_self_creation
         $assert_initializer
@@ -106,6 +116,7 @@ pub(crate) comptime fn generate_public_external(f: FunctionDefinition) -> Quoted
         $internal_check
         $view_check
         $authorize_once_check
+        $only_owner_check
     };
 
     // `mark_as_initialized` is placed after the user's function body. If it ran at the beginning, the contract

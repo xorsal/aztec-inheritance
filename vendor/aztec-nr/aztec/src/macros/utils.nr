@@ -43,6 +43,10 @@ pub(crate) comptime fn fn_has_authorize_once(f: FunctionDefinition) -> bool {
     f.has_named_attribute("authorize_once")
 }
 
+pub(crate) comptime fn fn_has_only_owner(f: FunctionDefinition) -> bool {
+    f.has_named_attribute("only_owner")
+}
+
 comptime fn signature_of_type(typ: Type) -> CtString {
     if typ.is_field() {
         "Field".as_ctstring()

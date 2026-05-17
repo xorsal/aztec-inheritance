@@ -8,7 +8,7 @@ use crate::macros::{
     utils::{is_fn_external, module_has_initializer},
 };
 use super::utils::{fn_has_allow_phase_change, fn_has_noinitcheck, is_fn_initializer, is_fn_only_self, is_fn_view};
-use auth_registry::AUTHORIZE_ONCE_REGISTRY;
+use auth_registry::{AUTHORIZE_ONCE_REGISTRY, ONLY_OWNER_REGISTRY};
 use initialization_utils::EMIT_PUBLIC_INIT_NULLIFIER_FN_NAME;
 
 // Functions can have multiple attributes applied to them, e.g. a single function can have #[external("public")],
@@ -323,6 +323,34 @@ pub comptime fn authorize_once(f: FunctionDefinition, from_arg_name: CtString, n
     }
 
     AUTHORIZE_ONCE_REGISTRY.insert(f, (from_arg_name, nonce_arg_name));
+}
+
+/// Restricts access to an [`external`] public function so that it can only be called by the address stored at
+/// `self.storage.owner`.
+///
+/// Pairs with the `aztec_ownable_mixin` contract template: the host must `.compose("aztec_ownable")` (so that
+/// `_assert_only_owner` is migrated into the host scope) and inline `owner: PublicMutable<AztecAddress, Context>` in
+/// its storage. The attribute is then applied alongside `#[external("public")]`:
+///
+/// ```noir
+/// use aztec_ownable_mixin::only_owner;
+///
+/// #[only_owner]
+/// #[external("public")]
+/// fn admin_setter(value: u64) { ... }
+/// ```
+///
+/// Only valid on public functions in this version. Private functions can call `_assert_only_owner` manually after
+/// reading the owner via `self.view(...)` if needed.
+pub comptime fn only_owner(f: FunctionDefinition) {
+    if !is_fn_external(f) {
+        let name = f.name();
+        panic(
+            f"The #[only_owner] attribute can only be applied to #[external(\"public\")] functions - {name} is not external",
+        );
+    }
+
+    ONLY_OWNER_REGISTRY.insert(f, ());
 }
 
 /// An external function is callable from outside the contract.

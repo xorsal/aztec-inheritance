@@ -2,8 +2,8 @@ use crate::macros::{
     functions::initialization_utils::has_public_init_checked_functions,
     internals_functions_generation::external::helpers::{create_authorize_once_check, get_abi_relevant_attributes},
     utils::{
-        fn_has_allow_phase_change, fn_has_authorize_once, fn_has_noinitcheck, is_fn_initializer, is_fn_only_self,
-        is_fn_view, module_has_initializer, module_has_storage,
+        fn_has_allow_phase_change, fn_has_authorize_once, fn_has_noinitcheck, fn_has_only_owner, is_fn_initializer,
+        is_fn_only_self, is_fn_view, module_has_initializer, module_has_storage,
     },
 };
 use crate::protocol::meta::utils::derive_serialization_quotes;
@@ -119,6 +119,14 @@ pub(crate) comptime fn generate_private_external(f: FunctionDefinition) -> Quote
     } else {
         quote {}
     };
+
+    // #[only_owner] is only valid on public functions; surface a clear error if a host applies it to a private one.
+    if fn_has_only_owner(f) {
+        let name = f.name();
+        panic(
+            f"#[only_owner] is not supported on private functions in this version - {name} is private",
+        )
+    }
 
     // Finally, we need to change the return type to be `PrivateCircuitPublicInputs`, which is what the Private Kernel
     // circuit expects.

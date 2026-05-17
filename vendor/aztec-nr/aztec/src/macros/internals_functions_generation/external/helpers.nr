@@ -1,5 +1,5 @@
 use crate::macros::{
-    functions::auth_registry::AUTHORIZE_ONCE_REGISTRY,
+    functions::auth_registry::{AUTHORIZE_ONCE_REGISTRY, ONLY_OWNER_REGISTRY},
     utils::{is_fn_initializer, is_fn_only_self, is_fn_view},
 };
 
@@ -116,5 +116,32 @@ pub(crate) comptime fn create_authorize_once_check(f: FunctionDefinition, is_pri
         } else {
             assert($nonce_check_quote, $invalid_nonce_message);
         }
+    }
+}
+
+/// Builds the quoted owner check that the public #[external] body re-emitter prepends to the function body when a
+/// function is marked with #[only_owner]. The check calls `_assert_only_owner(self.msg_sender(),
+/// self.storage.owner.read())`; both symbols are expected to be in scope via the `aztec_ownable_mixin` template
+/// composition. Private functions are not supported in this version — reading `PublicMutable` from a private context
+/// would require an extra self.view(...) hop that we do not yet emit.
+pub(crate) comptime fn create_only_owner_check(f: FunctionDefinition, is_private: bool) -> Quoted {
+    let name: Quoted = f.name();
+
+    // Ensure the marker fired; otherwise the caller stitched this in at the wrong place.
+    let maybe_only_owner_marker = ONLY_OWNER_REGISTRY.get(f);
+    if maybe_only_owner_marker.is_none() {
+        panic(
+            f"Functions marked with #[only_owner] must have #[external(\"public\")] placed last so the check can be injected",
+        )
+    }
+
+    if is_private {
+        panic(
+            f"#[only_owner] is not supported on private functions in this version - {name} is private",
+        )
+    }
+
+    quote {
+        _assert_only_owner(self.msg_sender(), self.storage.owner.read());
     }
 }
