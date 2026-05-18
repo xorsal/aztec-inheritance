@@ -5,7 +5,6 @@ members = [
   "src/aztec-upgradable-mixin",
   "src/aztec-ownable-mixin",
   "src/aztec-pausable-mixin",
-  "src/aztec-storage-export-mixin",
   "src/upgradable_counter",
   "src/upgradable_counter_v2",
   "src/ownable_upgradable_counter",
