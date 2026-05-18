@@ -1,0 +1,25 @@
+src/ownable_amm_token/Nargo.toml
+  s_35467aa51f6067::t_0a4e07d7f49a32 1-13
+src/ownable_amm_token/src/main.nr
+  s_35467aa51f6067::t_dc64aad8a2b84a 30-31
+  s_35467aa51f6067::t_97bf9d23c3044e 1-26,28-29,32-91
+  s_35467aa51f6067::t_975cc964403473 27
+Nargo.toml
+  s_35467aa51f6067::t_1f3d7a3278f7f9 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "a2485ff6df833d5bb8d01e95cb2fd4e9c5d5ce98",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
