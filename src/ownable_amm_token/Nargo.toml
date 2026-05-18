@@ -11,3 +11,4 @@ compressed_string = { path = "../../vendor/aztec-nr/compressed-string" }
 balance_set = { path = "../../vendor/aztec-nr/balance-set" }
 aztec_token_mixin = { path = "../aztec-token-mixin" }
 aztec_ownable_mixin = { path = "../aztec-ownable-mixin" }
+aztec_storage_export_mixin = { path = "../aztec-storage-export-mixin" }

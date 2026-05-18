@@ -1,0 +1,9 @@
+[package]
+name = "aztec_storage_export_mixin"
+type = "lib"
+authors = ["Wonderland"]
+compiler_version = ">=0.18.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+compressed_string = { path = "../../vendor/aztec-nr/compressed-string" }

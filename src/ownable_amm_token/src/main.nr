@@ -15,7 +15,7 @@ pub mod test;
 
 use aztec::macros::{AztecConfig, aztec};
 
-#[aztec(AztecConfig::new().compose("aip20_token").compose("aztec_ownable"))]
+#[aztec(AztecConfig::new().compose("aip20_token").compose("aztec_ownable").compose("aztec_storage_export"))]
 pub contract OwnableAmmToken {
     use aztec::{
         macros::{
@@ -27,6 +27,7 @@ pub contract OwnableAmmToken {
         state_vars::{Map, Owned, PublicImmutable, PublicMutable, StateVariable},
     };
     use aztec_token_mixin::TokenInitParams;
+    use aztec_storage_export_mixin::StorageSnapshot;
     use compressed_string::FieldCompressedString;
     use balance_set::BalanceSet;
     // FromField is required by the token functions injected via template composition.
