@@ -1,0 +1,21 @@
+src/ownable_amm_token/src/test.nr
+  s_35467aa51f6067::t_94975d1e778d1a 1
+src/ownable_amm_token/src/test/composition.nr
+  s_35467aa51f6067::t_fa7e4b96b7fe82 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "8f259576b8052308cdd7ccd9506b6af7125f1a23",
+  "prompts": {},
+  "sessions": {
+    "s_35467aa51f6067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5deceea7-e6cf-468f-a19a-5d7f3d72d9e0",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
