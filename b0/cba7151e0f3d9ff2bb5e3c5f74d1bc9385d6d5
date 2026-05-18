@@ -1,0 +1,32 @@
+src/ownable_pausable_counter/src/test/composition.nr
+  s_f0696ddfef1962::t_194b3768b5fd75 1-4,12-13,19
+  s_f0696ddfef1962::t_b5c07d2dc73a3d 85-112
+src/aztec-metadata-mixin/src/metadata_contract_template.nr
+  s_f0696ddfef1962::t_9b4496e05cae1a 1-62
+src/aztec-metadata-mixin/src/lib.nr
+  s_f0696ddfef1962::t_380f4f80361d15 1
+src/aztec-metadata-mixin/Nargo.toml
+  s_f0696ddfef1962::t_e05b724c8fd08f 1-8
+Nargo.toml
+  s_f0696ddfef1962::t_a7b6a4c9d85deb 8
+src/ownable_pausable_counter/src/main.nr
+  s_f0696ddfef1962::t_0a34e7e902df5a 1-2,4-9,15-20,38,41,63
+src/ownable_pausable_counter/Nargo.toml
+  s_f0696ddfef1962::t_c84b13d7518aa6 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "b0cba7151e0f3d9ff2bb5e3c5f74d1bc9385d6d5",
+  "prompts": {},
+  "sessions": {
+    "s_f0696ddfef1962": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e50bfcc3-9679-4f58-84ca-6459d65da035",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
