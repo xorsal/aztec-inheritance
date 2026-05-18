@@ -1,21 +1,23 @@
-// Demo host: a simple public counter that composes BOTH the ownable mixin
-// AND the pausable mixin.
+// Demo host: a simple public counter that composes the ownable, pausable,
+// and metadata mixins.
 //
-// The ownable template contributes the `owner` slot plus get_owner /
-// transfer_ownership; the pausable template contributes the `paused` slot
-// plus pause / unpause / paused, and shares the same `owner` slot via the
-// storage merger's same-name+same-type dedup (so a single
-// `_initialize_ownable(owner)` covers both templates' auth).
-//
-// The host's only domain-specific state is `count`. `increment` gates itself
-// with `_assert_not_paused`, demonstrating that the pausable library helper
-// is callable from host-authored code after composition.
+// All three templates contribute their `owner` slot, which dedupes to a
+// single PublicMutable<AztecAddress> via the storage merger's same-name+
+// same-type rule -- so one `_initialize_ownable(owner)` authenticates
+// admin paths on all three templates. The host's only domain-specific
+// state is `count`. `increment` gates itself with `_assert_not_paused`,
+// showing the pausable library helper composing with host-authored code.
 
 pub mod test;
 
 use aztec::macros::{AztecConfig, aztec};
 
-#[aztec(AztecConfig::new().compose("aztec_ownable").compose("aztec_pausable"))]
+#[aztec(
+    AztecConfig::new()
+        .compose("aztec_ownable")
+        .compose("aztec_pausable")
+        .compose("aztec_metadata")
+)]
 pub contract OwnablePausableCounter {
     use aztec::{
         macros::{
@@ -33,9 +35,10 @@ pub contract OwnablePausableCounter {
 
     #[initializer]
     #[external("public")]
-    fn constructor(owner: AztecAddress) {
+    fn constructor(owner: AztecAddress, metadata: Field) {
         self.internal._initialize_ownable(owner);
         self.internal._initialize_pausable();
+        self.internal._initialize_metadata(metadata);
         self.storage.count.write(0);
     }
 
@@ -57,5 +60,6 @@ pub contract OwnablePausableCounter {
     //   from aztec_ownable:  get_owner, transfer_ownership, _initialize_ownable
     //   from aztec_pausable: pause, unpause, paused, _initialize_pausable,
     //                        _assert_not_paused (library)
+    //   from aztec_metadata: get_metadata, set_metadata, _initialize_metadata
     // =========================================================================
 }

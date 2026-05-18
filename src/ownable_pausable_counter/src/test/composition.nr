@@ -1,7 +1,7 @@
-// TXE tests for a host that composes aztec_ownable + aztec_pausable. Proves
-// that both templates' surfaces coexist and that the shared `owner` slot
-// authenticates pausable's admin functions through the ownable-initialized
-// value.
+// TXE tests for a host that composes aztec_ownable + aztec_pausable +
+// aztec_metadata. Proves that all three templates' surfaces coexist and
+// that the shared `owner` slot authenticates every admin path through
+// the ownable-initialized value.
 
 use aztec::{
     protocol::address::AztecAddress,
@@ -9,12 +9,14 @@ use aztec::{
 };
 use crate::OwnablePausableCounter;
 
+global INITIAL_METADATA: Field = 0xCAFEBABE;
+
 unconstrained fn setup() -> (TestEnvironment, AztecAddress, AztecAddress, AztecAddress) {
     let mut env = TestEnvironment::new();
     let deployer = env.create_light_account();
     let owner = env.create_light_account();
 
-    let initializer = OwnablePausableCounter::interface().constructor(owner);
+    let initializer = OwnablePausableCounter::interface().constructor(owner, INITIAL_METADATA);
     let addr = env.deploy("@ownable_pausable_counter/OwnablePausableCounter")
         .with_public_initializer(deployer, initializer);
     (env, owner, deployer, addr)
@@ -79,4 +81,32 @@ unconstrained fn pause_then_unpause_restores_increment() {
     let caller = env.create_light_account();
     env.call_public(caller, host.increment());
     assert_eq(env.view_public(host.get_count()), 1);
+}
+
+// Metadata template surface: the constructor's value is readable through
+// the composed get_metadata view.
+#[test]
+unconstrained fn metadata_reflects_constructor_value() {
+    let (mut env, _owner, _deployer, addr) = setup();
+    let host = OwnablePausableCounter::at(addr);
+    assert_eq(env.view_public(host.get_metadata()), INITIAL_METADATA);
+}
+
+// Owner can rotate metadata; the new value sticks.
+#[test]
+unconstrained fn owner_can_set_metadata() {
+    let (mut env, owner, _deployer, addr) = setup();
+    let host = OwnablePausableCounter::at(addr);
+    let new_value: Field = 0xDEADBEEF;
+    env.call_public(owner, host.set_metadata(new_value));
+    assert_eq(env.view_public(host.get_metadata()), new_value);
+}
+
+// Non-owner attempting set_metadata reverts through the metadata admin gate.
+#[test(should_fail_with = "caller is not owner")]
+unconstrained fn non_owner_cannot_set_metadata() {
+    let (mut env, _owner, _deployer, addr) = setup();
+    let host = OwnablePausableCounter::at(addr);
+    let stranger = env.create_light_account();
+    env.call_public(stranger, host.set_metadata(0xBADF00D));
 }
