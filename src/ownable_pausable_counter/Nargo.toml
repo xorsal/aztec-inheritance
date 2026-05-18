@@ -1,0 +1,10 @@
+[package]
+name = "ownable_pausable_counter"
+type = "contract"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
+aztec_ownable_mixin = { path = "../aztec-ownable-mixin" }
+aztec_pausable_mixin = { path = "../aztec-pausable-mixin" }

@@ -1,0 +1,8 @@
+[package]
+name = "aztec_pausable_mixin"
+type = "lib"
+authors = ["Wonderland"]
+compiler_version = ">=0.18.0"
+
+[dependencies]
+aztec = { path = "../../vendor/aztec-nr/aztec" }
