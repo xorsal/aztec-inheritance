@@ -1,0 +1,19 @@
+src/ownable_amm_token/src/main.nr
+  s_f0696ddfef1962::t_3ca72e7078e36b 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "6921040cc0d088b042663bbfc99e98e7f76461dd",
+  "prompts": {},
+  "sessions": {
+    "s_f0696ddfef1962": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e50bfcc3-9679-4f58-84ca-6459d65da035",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
