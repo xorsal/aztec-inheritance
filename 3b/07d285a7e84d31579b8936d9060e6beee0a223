@@ -1,0 +1,34 @@
+src/aztec-pausable-mixin/src/pausable_contract_template.nr
+  s_f0696ddfef1962::t_7ca0ffa35ea5e7 1-80
+src/aztec-pausable-mixin/src/lib.nr
+  s_f0696ddfef1962::t_7bc691a382128a 1
+src/ownable_pausable_counter/src/test/composition.nr
+  s_f0696ddfef1962::t_18949121491e6d 1-82
+Nargo.toml
+  s_f0696ddfef1962::t_12d8389de55047 14
+  s_f0696ddfef1962::t_91f7910ea61e5c 7
+src/ownable_pausable_counter/Nargo.toml
+  s_f0696ddfef1962::t_f1b845a6b73d11 1-10
+src/aztec-pausable-mixin/Nargo.toml
+  s_f0696ddfef1962::t_8b7d3636e66c11 1-8
+src/ownable_pausable_counter/src/test.nr
+  s_f0696ddfef1962::t_1a29812ca46311 1
+src/ownable_pausable_counter/src/main.nr
+  s_f0696ddfef1962::t_7a803267ec40e7 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "3b07d285a7e84d31579b8936d9060e6beee0a223",
+  "prompts": {},
+  "sessions": {
+    "s_f0696ddfef1962": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e50bfcc3-9679-4f58-84ca-6459d65da035",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "xorsal <zorzal@wonderland.xyz>"
+    }
+  }
+}
