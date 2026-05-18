@@ -179,20 +179,31 @@ pub(crate) comptime fn generate_composed_storage_quoted(host: Module, template_k
         }
     }
 
-    // Host fields appended after templates. Same-name host vs template is a hard error - silent shadowing would let
-    // the host accidentally trash invariants the template relies on.
+    // Host fields appended after templates. Same-name+same-type host-vs-template is treated the same as the
+    // template-vs-template case: the field is deduped (the host's declaration "wins" but the slot/type is identical so
+    // there is nothing to choose). This lets read-only "view" templates (e.g. the storage-export mixin) declare a field
+    // they intend to read via `self.storage.<name>` so their function bodies type-check standalone, without forcing the
+    // host to drop its own declaration. Type mismatch on the same name is still a hard error - silent shadowing would
+    // let the host accidentally trash invariants the template relies on.
     let host_storage = find_storage_struct(host, quote { host });
     for field in host_storage.fields_as_written() {
         let (fname, ftyp, _) = field;
+        let mut already_present = false;
         for i in 0..merged_names.len() {
             if merged_names[i] == fname {
-                panic(
-                    f"compose: host storage field {fname} collides with a composed template field of the same name",
-                )
+                let (_existing_name, existing_typ) = merged_pairs[i];
+                if !types_match(existing_typ, ftyp) {
+                    panic(
+                        f"compose: host storage field {fname} collides with a composed template field of the same name and a different type",
+                    )
+                }
+                already_present = true;
             }
         }
-        merged_names = merged_names.push_back(fname);
-        merged_pairs = merged_pairs.push_back((fname, ftyp));
+        if !already_present {
+            merged_names = merged_names.push_back(fname);
+            merged_pairs = merged_pairs.push_back((fname, ftyp));
+        }
     }
 
     // Walk the merged list and assign slots linearly, mirroring the allocator in storage.nr.
