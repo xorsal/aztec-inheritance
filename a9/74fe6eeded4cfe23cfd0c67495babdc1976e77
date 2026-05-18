@@ -1,0 +1,9 @@
+vendor/aztec-nr/aztec/src/macros/compose_template.nr
+  ai_agent 182-187,191,194-200,203-206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "a974fe6eeded4cfe23cfd0c67495babdc1976e77",
+  "prompts": {}
+}
